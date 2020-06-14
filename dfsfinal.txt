@@ -1,0 +1,70 @@
+#include<iostream>
+#include<list>
+using namespace std;
+
+class Graph 
+{ 
+    int V;    // No. of vertices 
+    list<int> *adj;    // Pointer to an array containing adjacency lists 
+    void DFSUtil(int v, bool visited[]);  // A function used by DFS 
+public: 
+    Graph(int V)
+	{
+		
+      this->V = V; 
+      adj = new list<int>[V]; 
+
+	}
+    void addEdge(int v, int w);   // function to add an edge to graph 
+    void DFS();    // prints DFS traversal of the complete graph 
+}; 
+  
+void Graph::addEdge(int v, int w) 
+{ 
+    adj[v].push_back(w); // Add w to v's list. 
+} 
+  
+void Graph::DFSUtil(int v, bool visited[]) 
+{ 
+    visited[v] = true; 
+    cout << v << " "; 
+  
+    // Recur for all the vertices adjacent to this vertex 
+    list<int>::iterator i; 
+    for(i = adj[v].begin(); i != adj[v].end(); ++i) 
+        if(!visited[*i]) 
+            DFSUtil(*i, visited); 
+} 
+  void Graph::DFS() 
+{ 
+    // Mark all the vertices as not visited 
+    bool *visited = new bool[V]; 
+    for (int i = 0; i < V; i++) 
+        visited[i] = false; 
+  
+    // Call the recursive helper function to print DFS traversal 
+    // starting from all vertices one by one 
+    for (int i = 0; i < V; i++) 
+        if (visited[i] == false) 
+            DFSUtil(i, visited); 
+} 
+  
+int main()
+{
+	int V,e,a,b;
+	cout<<"\n Enter the no of vertices in the graph";
+	cin>>V;
+	Graph g(4);
+	cout<<"\n Enter the no fo edegs you want in tthe graph ";
+	cin>>e;
+	for(int i=0;i<e;i++)
+	{
+	   cout<<"\n Enter link";
+	   cin>>a>>b;
+	   g.addEdge(a,b);
+	}
+	cout<<"\n following is the DFS traversal ";
+	g.DFS();
+	return 0;
+}
+

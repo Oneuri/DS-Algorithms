@@ -1,0 +1,334 @@
+#include<iostream>
+using namespace std;
+class Node{
+	public:
+		int data;
+		Node *next;
+};
+class List:public Node{
+	Node *listptr,*temp;
+	public:
+		List()
+		{
+			listptr=NULL;
+			temp=NULL;
+		}
+		void create();
+		void display();
+		int length();
+		void insert();
+		void delete1();
+		void search();
+		void copy(List &list);
+		void sort();
+		void reverse();
+		void concatenate(List &list2);
+};
+int main()
+{
+	List list,list1,list2;
+	int ch;
+	while(1)
+	{
+		cout<<"\nChoices: [1]Create [2]Display [3]Length [4]Insert [5]Delete [6]Search [7]Copy [8]Sort [9]Reverse [10]Create List2 [11]Display List2 [12]Concatenate [13]Exit"<<endl;
+		cout<<"Enter choice: ";
+		cin>>ch;
+		switch(ch)
+		{
+			case 1:
+				list.create();
+				break;
+			case 2:
+				list.display();
+				break;
+			case 3:
+				cout<<"Length="<<list.length();
+				break;
+			case 4:
+				list.insert();
+				break;
+			case 5:
+				list.delete1();
+				break;
+			case 6:
+				list.search();
+				break;
+			case 7:
+				list1.copy(list);
+				cout<<"List 1: ";
+				list.display();
+				cout<<"\nNew List: ";
+				list1.display();
+				break;
+			case 8:
+				list.sort();
+				break;
+			case 9:
+				list.reverse();
+				break;
+			case 10:
+				list2.create();
+				break;
+			case 11:
+				list2.display();
+				break;
+			case 12:
+				list.concatenate(list2);
+				break;
+			case 13:
+				cout<<"Exiting...";
+				return 0;
+				break;
+			default:
+				cout<<"Invalid choice"<<endl;
+		}
+	}
+	return 0;
+}
+void List::create()
+{
+	int num;
+	cout<<"Enter data: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	if(listptr==NULL)
+	{
+		listptr=newnode;
+		temp=listptr;
+		newnode->next=listptr;
+	}
+	else
+	{
+		temp->next=newnode;
+		newnode->next=listptr;
+		temp=temp->next;
+	}
+}
+void List::display()
+{
+	temp=listptr;
+	cout<<"->";
+	while(temp->next!=listptr)
+	{
+		cout<<temp->data<<"->";
+		temp=temp->next;
+	}
+	cout<<temp->data<<"->";
+}
+int List::length()
+{
+	int count=0;
+	temp=listptr;
+	while(temp->next!=listptr)
+	{
+		count++;
+		temp=temp->next;
+	}
+	return count+1;
+}
+void List::insert()
+{
+	int pos,num,i;
+	cout<<"Enter data: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	cout<<"Enter insert position: ";
+	cin>>pos;
+	temp=listptr;
+	if(pos==1)
+	{
+		if(listptr==NULL)
+		{
+			listptr=newnode;
+			temp=listptr;
+			newnode->next=listptr;
+		}
+		else
+		{
+			temp=listptr;
+			while(temp->next!=listptr)
+			{
+				temp=temp->next;
+			}
+			newnode->next=listptr;
+			listptr=newnode;
+			temp->next=listptr;
+		}
+	}
+	else
+	{
+		for(i=1;i<pos-1&&temp->next!=listptr;i++)
+		{
+			temp=temp->next;
+		}
+		newnode->next=temp->next;
+		temp->next=newnode;
+	}
+}
+void List::delete1()
+{
+	int pos,i;
+	Node *temp1;
+	cout<<"Enter delete position: ";
+	cin>>pos;
+	if(pos==1)
+	{
+		temp=listptr;
+		temp1=listptr;
+		while(temp1->next!=listptr)
+		{
+			temp1=temp1->next;
+		}
+		listptr=temp->next;
+		temp1->next=listptr;
+		delete(temp);
+	}
+	else
+	{
+		temp=listptr;
+		for(i=1;i<pos-1&&temp->next!=listptr;i++)
+		{
+			temp=temp->next;
+		}
+		temp1=temp->next;
+		temp->next=temp1->next;
+		delete(temp1);
+	}
+}
+void List::search()
+{
+	int num,count=0;
+	cout<<"Enter data to be searched: ";
+	cin>>num;
+	temp=listptr;
+	while(temp->next!=listptr)
+	{
+		count++;
+		if(temp->data==num)
+		{
+			cout<<"Data found at node position "<<count;
+		}
+		temp=temp->next;
+	}
+	if(temp->data==num)
+	{
+		cout<<"Data found at node position "<<count+1;
+	}
+}
+void List::copy(List &list)
+{
+	Node *temp1=list.listptr;
+	while(temp1->next!=list.listptr)
+	{
+		Node *newnode=new Node;
+		newnode->data=temp1->data;
+		newnode->next=NULL;
+		if(listptr==NULL)
+		{
+			listptr=newnode;
+			temp=listptr;
+			newnode->next=listptr;
+		}
+		else
+		{
+			temp->next=newnode;
+			newnode->next=listptr;
+			temp=temp->next;
+		}
+		temp1=temp1->next;
+	}
+	Node *newnode1=new Node;
+	newnode1->data=temp1->data;
+	newnode1->next=NULL;
+	temp->next=newnode1;
+    newnode1->next=listptr;
+}
+void List::sort()
+{
+	Node *i,*j;
+	int t;
+    for(i=listptr;i->next!=listptr;i=i->next)
+	{
+		for(j=i->next;j->next!=listptr;j=j->next)
+		{
+			if(i->data>j->data)
+			{
+				t=i->data;
+		    	i->data=j->data;
+		    	j->data=t;
+			}
+		}
+	}
+	temp=listptr;
+	while(temp->next!=listptr)
+	{
+		if(temp->data>i->data)
+    	{
+       		t=i->data;
+	        i->data=temp->data;
+	    	temp->data=t;
+        }
+        temp=temp->next;
+	}
+}
+void List::reverse()
+{
+	Node *curr,*forw,*back;
+	forw=listptr;
+	curr=NULL;
+	while(forw->next!=listptr)
+	{
+		back=curr;
+		curr=forw;
+		forw=forw->next;
+		curr->next=back;
+	}
+	back=curr;
+	curr=forw;
+	forw=forw->next;
+	curr->next=back;
+	listptr=curr;
+	temp=listptr;
+	while(temp->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	temp->next=listptr;
+}
+void List::concatenate(List &list2)
+{
+	temp=listptr;
+	while(temp->next!=listptr)
+	{
+		temp=temp->next;
+	}
+	Node *temp1=list2.listptr;
+	while(temp1->next!=list2.listptr)
+	{
+		Node *newnode=new Node;
+		newnode->data=temp1->data;
+		newnode->next=NULL;
+		if(temp==NULL)
+		{
+			listptr=newnode;
+			temp=listptr;
+			newnode->next=listptr;
+		}
+		else
+		{
+			temp->next=newnode;
+			newnode->next=listptr;
+			temp=temp->next;
+		}
+		temp1=temp1->next;
+	}
+	Node *newnode1=new Node;
+	newnode1->data=temp1->data;
+	newnode1->next=NULL;
+	temp->next=newnode1;
+	newnode1->next=listptr;
+}

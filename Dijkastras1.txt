@@ -1,0 +1,78 @@
+
+Conversation opened. 1 unread message.
+
+Skip to content
+Using Symbiosis Institute of Technology Mail with screen readers
+
+3 of 2,359
+Document from Siddharth Dalal
+Inbox
+x
+
+Siddharth Dalal
+Attachments
+10:34 PM (25 minutes ago)
+to me
+
+dijkshra.cpp
+
+This email is governed by the Disclaimer Terms of  SIU which may be viewed at http://www.siu.edu.in/downloads/email-disclaimer.php
+
+
+
+Attachments area
+
+#include<iostream>
+#include<climits>     
+using namespace std;
+#define vertex 7      
+int minimumDist(int dist[], bool Dset[])  
+{
+	int min=INT_MAX,index;                
+	for(int v=0;v<vertex;v++)
+	{
+		if(Dset[v]==false && dist[v]<=min)      
+		{
+			min=dist[v];
+			index=v;
+		}
+	}
+	return index;
+}
+void dijkstra(int graph[vertex][vertex],int src) 
+{
+	int dist[vertex];                             
+	bool Dset[vertex];
+	for(int i=0;i<vertex;i++)                      
+	{
+		dist[i]=INT_MAX;
+		Dset[i]=false;	
+	}
+	dist[src]=0;                                   
+	for(int c=0;c<vertex;c++)                           
+	{
+		int u=minimumDist(dist,Dset);              
+		Dset[u]=true;                              
+		for(int v=0;v<vertex;v++)                  
+		
+		{
+			if(!Dset[v] && graph[u][v] && dist[u]!=INT_MAX && dist[u]+graph[u][v]<dist[v])
+			dist[v]=dist[u]+graph[u][v];
+		}
+	}
+	cout<<"Vertex\t\tDistance from source"<<endl;
+	for(int i=0;i<vertex;i++)                     
+	{
+		char c=65+i;
+		cout<<c<<"\t\t"<<dist[i]<<endl;
+	}
+}
+int main()
+{
+	int graph[vertex][vertex]={{0,5,3,0,0,0,0},{0,0,2,0,3,0,1},{0,0,0,7,7,0,0},{2,0,0,0,0,6,0},{0,0,0,2,0,1,0},{0,0,0,0,0,0,0},
+		                        {0,0,0,0,1,0,0}};
+	dijkstra(graph,0);
+	return 0;	                        
+}
+dijkshra.cpp
+Displaying dijkshra.cpp.

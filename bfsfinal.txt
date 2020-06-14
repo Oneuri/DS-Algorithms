@@ -1,0 +1,81 @@
+#include<iostream>
+#include<list>
+
+using namespace std;
+
+//this is Graaph class
+class Graph 
+{
+	int V;//no of edges;
+	list<int> *adj;
+	public:
+		Graph(int V)
+		{
+			this->V=V;
+			adj = new list<int>[V];
+		}
+		//function to add edges into the graph 
+		void addEdge(int v,int w);
+		//prints BFS traversals from the given source s;
+        void BFS(int s);		
+};
+void Graph :: addEdge(int v,int w)
+{
+	adj[v].push_back(w);
+}
+void Graph::BFS(int s)
+{
+	bool *visited = new bool[V];//boolean array of all the visited nodes
+	//markig all the nodes False initally 
+	for(int i=0;i<V;i++)
+	{
+		visited[i]=false;
+	}
+	//create a list for the BFS
+	list<int> queue;
+	
+	//mark the current node as true in the visited boolean list 
+	visited[s]=true;
+	queue.push_back(s);
+	list<int>::iterator i;
+	
+	while(!queue.empty())
+	{
+		s=queue.front();
+		cout<<s<<" ";
+		queue.pop_front(); 
+	//get all adjacent vertices of the poped element
+	//vertex s.if a adjacent node is not visited
+	//then mark true in the viited boolean list 
+	
+	for(i=adj[s].begin();i!=adj[s].end();++i)
+	{
+		if(!visited[*i])
+		{
+			visited[*i]=true;
+			queue.push_back(*i);
+		}
+	}
+    } 
+}
+int main()
+{
+	int V,e,a,b,n;
+	cout<<"\n Enter the no of vertices in the graph";
+	cin>>V;
+	Graph g(4);
+	cout<<"\n Enter the no fo edegs you want in tthe graph ";
+	cin>>e;
+	for(int i=0;i<e;i++)
+	{
+	   cout<<"\n Enter link";
+	   cin>>a>>b;
+	   g.addEdge(a,b);
+	}
+	cout<<"\n Enter the edge you want the display from ";
+	cin>>n;
+	g.BFS(n);
+	return 0;
+}
+
+

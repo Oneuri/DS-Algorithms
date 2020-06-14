@@ -1,0 +1,411 @@
+#include<iostream>
+using namespace std;
+class Node{
+	public:
+		int data;
+		Node *next;
+};
+class List:public Node{
+	Node *listptr,*temp;
+	public:
+		List()
+		{
+			listptr=NULL;
+			temp=NULL;
+		}
+		void create();
+		void display();
+		void insert_beg();
+		void insert_end();
+		void insert_int();
+		void delete_beg();
+		void delete_end();
+		void delete_int();
+		void length();
+		void reverse();
+		void concatenate(List &list1);
+		void sort();
+		void union1(List &list,List &list1);
+		void intersection(List &list,List &list1);
+};
+int main()
+{
+	List list,list1,list2,list3;
+	int ch;
+	while(1)
+	{
+		cout<<"\nChoices: [1]Create [2]Display [3]Insert at beginning [4]Insert at end [5]Insert at intermediate position [6]Delete at beginning [7]Delete at end [8]Delete at intermediate position [9]Length [10]Reverse [11]Create list2 [12]Display list2 [13]Concatenate [14]Sort [15]Union [16]Intersection [17]Exit"<<endl;
+		cout<<"Enter choice: ";
+		cin>>ch;
+		switch(ch)
+		{
+			case 1:
+				list.create();
+				break;
+			case 2:
+				list.display();
+				break;
+			case 3:
+				list.insert_beg();
+				break;
+			case 4:
+				list.insert_end();
+				break;
+			case 5:
+				list.insert_int();
+				break;
+			case 6:
+				list.delete_beg();
+				break;
+			case 7:
+				list.delete_end();
+				break;
+			case 8:
+				list.delete_int();
+				break;
+			case 9:
+				list.length();
+				break;
+			case 10:
+				list.reverse();
+				break;
+			case 11:
+				list1.create();
+				break;
+			case 12:
+				list1.display();
+				break;
+			case 13:
+				list.concatenate(list1);
+				break;
+			case 14:
+				list.sort();
+				break;
+			case 15:
+				list2.union1(list,list1);
+				list2.display();
+				break;
+			case 16:
+				list3.intersection(list,list1);
+				break;
+			case 17:
+				cout<<"Exiting...";
+				return 0;
+				break;
+			default:
+				cout<<"Invalid choice"<<endl;
+		}
+	}
+	return 0;
+}
+void List::create()
+{
+	int num;
+	cout<<"Enter data: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	if(listptr==NULL)
+	{
+		listptr=newnode;
+		temp=listptr;
+	}
+	else
+	{
+		temp->next=newnode;
+		temp=temp->next;
+	}
+}
+void List::display()
+{
+	temp=listptr;
+	while(temp!=NULL)
+	{
+		cout<<temp->data<<"->";
+		temp=temp->next;
+	}
+	cout<<"NULL";
+}
+void List::insert_beg()
+{
+	int num;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	if(listptr==NULL)
+	{
+		listptr=newnode;
+		temp=listptr;
+	}
+	else
+	{
+    	newnode->next=listptr;
+		listptr=newnode;
+	}
+}
+void List::insert_end()
+{
+	int num;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	temp=listptr;
+	while(temp->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	temp->next=newnode;
+}
+void List::insert_int()
+{
+	int num,pos;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	cout<<"Enter insert position: ";
+    cin>>pos;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	temp=listptr;
+	for(int i=1;i<pos-1&&temp->next!=NULL;i++)
+	{
+		temp=temp->next;
+	}
+	newnode->next=temp->next;
+	temp->next=newnode;
+}
+void List::delete_beg()
+{
+	temp=listptr;
+	listptr=temp->next;
+}
+void List::delete_end()
+{
+	Node *temp1;
+	temp=listptr;
+	while(temp->next->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	temp1=temp->next;
+	delete(temp1);
+	temp->next=NULL;
+}
+void List::delete_int()
+{
+	int i,pos;
+	Node *temp1;
+	cout<<"Enter delete position: ";
+	cin>>pos;
+	temp=listptr;
+	for(i=1;i<pos-1&&temp->next!=NULL;i++)
+	{
+		temp=temp->next;
+	}
+	temp1=temp->next;
+	temp->next=temp1->next;
+	delete(temp1);
+}
+void List::length()
+{
+	int count=0;
+	temp=listptr;
+	while(temp!=NULL)
+	{
+		temp=temp->next;
+		count++;
+	}
+	cout<<"Length="<<count<<endl;
+}
+void List::reverse()
+{
+	Node *forw,*curr,*back;
+	forw=listptr;
+	curr=NULL;
+	while(forw!=NULL)
+	{
+		back=curr;
+		curr=forw;
+		forw=forw->next;
+		curr->next=back;
+	}
+	listptr=curr;
+}
+void List::concatenate(List &list1)
+{
+	temp=listptr;
+	while(temp->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	Node *temp1=list1.listptr;
+	while(temp1!=NULL)
+	{
+		Node *newnode=new Node;
+		newnode->data=temp1->data;
+		newnode->next=NULL;
+		if(temp==NULL)
+		{
+			listptr=newnode;
+			temp=listptr;
+		}
+		else
+		{
+			temp->next=newnode;
+		    temp=temp->next;
+		}
+		temp1=temp1->next;
+	}
+}
+void List::sort()
+{
+	Node *i,*j;
+	int t;
+	for(i=listptr;i->next!=NULL;i=i->next)
+	{
+		for(j=i->next;j!=NULL;j=j->next)
+		{
+			if(i->data>j->data)
+			{
+				t=i->data;
+				i->data=j->data;
+				j->data=t;
+			}
+		}
+	}
+}
+void List::union1(List &list,List &list1)
+{
+	Node *temp1=list.listptr;
+	while(temp1->next!=NULL)
+	{
+		temp1=temp1->next;
+	}
+	Node *temp2=list1.listptr;
+	while(temp2!=NULL)
+	{
+		Node *newnode=new Node;
+		newnode->data=temp2->data;
+		newnode->next=NULL;
+		if(temp1==NULL)
+		{
+			list.listptr=newnode;
+			temp1=list.listptr;
+		}
+		else
+		{
+			temp1->next=newnode;
+		    temp1=temp1->next;
+		}
+		temp2=temp2->next;
+	}
+	//lists concatenated
+	Node *i,*j;
+	int t;
+	for(i=list.listptr;i->next!=NULL;i=i->next)
+	{
+		for(j=i->next;j!=NULL;j=j->next)
+		{
+			if(i->data>j->data)
+			{
+				t=i->data;
+				i->data=j->data;
+				j->data=t;
+			}
+		}
+	}
+	//list sorted
+	temp1=list.listptr; 
+	while(temp1!=NULL)
+	{
+		if(temp1->next!=NULL&&temp1->data!=temp1->next->data) //if data of current node is not equal to data of next node
+		{
+			Node *newnode1=new Node;
+        	newnode1->data=temp1->data;
+        	newnode1->next=NULL;
+        	if(listptr==NULL)
+        	{
+        		listptr=newnode1;
+        		temp=listptr;
+        	}
+        	else
+    	    {
+    	    	temp->next=newnode1;
+    	    	temp=temp->next;
+        	}
+		}
+		else
+		{
+			if(temp1->next==NULL) //for last node
+			{
+				Node *newnode2=new Node;
+				newnode2->data=temp1->data;
+				newnode2->next=NULL;
+				temp->next=newnode2;
+			}
+		}
+		temp1=temp1->next;
+	}
+}
+	//nodes with repeated data are created only once in the new list
+void List::intersection(List &list,List &list1)
+{
+	Node *temp1,*temp2;
+	for(temp1=list.listptr;temp1!=NULL;temp1=temp1->next)
+	{
+		for(temp2=list1.listptr;temp2!=NULL;temp2=temp2->next)
+		{
+			if(temp1->data==temp2->data)
+			{
+				Node *newnode=new Node;
+            	newnode->data=temp1->data;
+             	newnode->next=NULL;
+            	if(listptr==NULL)
+            	{
+            		listptr=newnode;
+            		temp=listptr;
+            	}
+            	else
+    	        {
+    	        	temp->next=newnode;
+    	        	temp=temp->next;
+            	}
+			}
+		}
+	}
+	//new list created with nodes of equal data from both lists 
+	Node *i,*j;
+	int t;
+	for(i=listptr;i->next!=NULL;i=i->next)
+	{
+		for(j=i->next;j!=NULL;j=j->next)
+		{
+			if(i->data>j->data)
+			{
+				t=i->data;
+				i->data=j->data;
+				j->data=t;
+			}
+		}
+	}
+	//list sorted
+	temp=listptr;
+	while(temp!=NULL)
+	{
+		if(temp->next!=NULL&&temp->data!=temp->next->data)
+			cout<<temp->data<<"->";
+		else
+		{
+			if(temp->next==NULL)
+		        cout<<temp->data<<"->NULL";
+		}
+		temp=temp->next;
+	}
+	//nodes with unequal data in the list printed
+}
+

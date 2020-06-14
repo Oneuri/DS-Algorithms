@@ -1,0 +1,98 @@
+#include <iostream>
+#include <cstdlib>
+using namespace std;
+#define MAX 20
+/*
+ * Adjacency Matrix Class
+ */
+class AdjacencyMatrix
+{
+    private:
+        int n;
+        int **adj;
+        bool *visited;
+    public:
+        AdjacencyMatrix(int n)
+        {
+            this->n = n;
+            visited = new bool [n];
+            adj = new int* [n];
+            for (int i = 0; i < n; i++)
+            {
+                adj[i] = new int [n];
+                for(int j = 0; j < n; j++)
+                {
+                    adj[i][j] = 0;
+                }
+            }
+        }
+        /*
+         * Adding Edge to Graph
+         */ 
+        void add_edge(int origin, int destin)
+        {
+            if( origin > n || destin > n || origin < 0 || destin < 0)
+            {   
+                cout<<"Invalid edge!\n";
+            }
+            else
+            {
+                adj[origin - 1][destin - 1] = 1;
+            }
+        }
+        /*
+         * Print the graph
+         */ 
+        void display()
+        {
+            int i,j;
+            for(i = 0;i < n;i++)
+            {
+                for(j = 0; j < n; j++)
+                    cout<<adj[i][j]<<"  ";
+                cout<<endl;
+            }
+        }
+    void delete_node(int u){
+	int i,j;
+	if(n==0)
+	{
+		printf("Graph is empty\n");
+		return;
+	}
+	if( u>n )
+	{
+		printf("This node is not present in the graph\n");
+		return;
+	}
+	for(i=u;i<=n-1;i++)
+	   for(j=1;j<=n;j++)
+	   {
+		adj[j][i]=adj[j][i+1];  /* Shift columns left */
+		adj[i][j]=adj[i+1][j];  /* Shift rows up */
+	   }
+	n--; /*Decrease the number of nodes in the graph */
+}/*End of delete_node*/
+};
+/*
+ * Main
+ */ 
+int main()
+{
+    int nodes, max_edges, origin, destin;
+    cout<<"Enter number of nodes: ";
+    cin>>nodes;
+    AdjacencyMatrix am(nodes);
+    max_edges = nodes * (nodes - 1);
+    for (int i = 0; i < max_edges; i++)
+    {
+        cout<<"Enter edge (-1 -1 to exit): ";
+        cin>>origin>>destin;
+        if((origin == -1) && (destin == -1))
+            break;
+        am.add_edge(origin, destin);
+    }
+    am.display();
+    am.delete_node(2);
+    return 0;
+}

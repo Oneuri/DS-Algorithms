@@ -1,0 +1,226 @@
+#include<iostream>
+using namespace std;
+class Node
+{
+	int data;
+	Node *left;
+	Node *right;
+    public:
+		Node(int n) 
+		{ 
+		data=n; 
+		left=right=NULL; 
+		}
+friend class BSTree;
+};
+class BSTree
+{
+	public:
+	    Node *root;
+	    BSTree() 
+		{ 
+		root=NULL; 
+		}
+		void create();
+		void preorder(Node *ptr);
+		void inorder(Node *ptr);
+		void postorder(Node *ptr);
+		void deletes();
+		void display(Node *ptr,int);
+};
+
+int main()
+{
+	BSTree tree;
+	int choice,tnodes=0,lnodes=0;
+	do
+	{
+		cout<<"\nChoices :\n1]create \n2]Display \n3]preorder \n4]inorder \n5]postorder \n6]Delete \n7]Exit point\n";
+		cout<<"Enter choices :\n";
+		cin>>choice;
+		switch(choice)
+		{
+			case 1:
+				tree.create();
+				break;
+				
+			case 2:
+				tree.display(tree.root,1);
+				break;
+					
+			case 3:
+				tree.preorder(tree.root);
+				break;
+				
+			case 4:
+				tree.inorder(tree.root);
+				break;
+				
+			case 5:
+				tree.postorder(tree.root);
+				break;
+				
+			case 6:
+				tree.deletes();
+				break;
+					
+			case 7:
+				cout<<"\nExit point \n";
+				break;
+			
+		};
+	}while(choice!=7);
+}
+void BSTree::create()
+{
+	Node * newnode, *temp ; 
+	int n;
+    char ans ;
+	
+		cout<<"Enter the element to be inserted :";
+		cin>>n;
+        newnode=new Node(n);
+		
+		if (root == NULL)
+			root = newnode ;
+		else
+		{
+			temp = root; 
+			while (1)
+			{
+				if (n < temp->data)
+				{
+					if (temp->left==NULL)
+						{
+							temp->left = newnode;
+						 	break;
+					 	}
+					else
+							temp = temp->left ; 	
+				}
+				else
+				{
+					if (temp->right== NULL)
+						{	
+							temp->right = newnode ;	
+							break;
+						}
+					else
+							temp = temp->right;
+				}
+			}	
+
+			
+		}
+		
+	
+}
+void BSTree::display(Node *ptr,int level)
+{
+	int i;
+    if (ptr!=NULL)
+    {
+        display(ptr->right,level+1);
+        printf("\n");
+        if (ptr==root)
+        cout<<"Root->";
+        for (i=0;i<level&&ptr!=root;i++)
+            cout<<"        ";
+        cout<<ptr->data;
+        display(ptr->left,level+1);
+    }
+}
+
+void BSTree::preorder(Node *currentnode)
+{
+
+	if(currentnode!=NULL)
+	{
+		cout<<currentnode->data<<"\t";				
+		preorder(currentnode->left);			
+		preorder(currentnode->right);			
+	}
+
+}
+void BSTree::inorder(Node *currentnode)
+{
+	
+	if(currentnode!=NULL)
+	{
+	   	inorder(currentnode->left);			
+		cout <<currentnode->data<<"\t";				
+		inorder (currentnode->right);			
+	}
+
+}
+void BSTree::postorder(Node *currentnode)
+{
+	
+	if(currentnode!= NULL)
+	{
+		postorder(currentnode->left);			
+		postorder(currentnode->right);		
+		cout <<currentnode->data<<"\t";				
+	}
+
+}
+void BSTree::deletes()
+{
+	Node *temp,*parent=NULL,*father,*r,*son;
+	temp=root;
+	int n;
+	cout<<"Enter data to be deleted :\n";
+	cin>>n;
+	while((temp->data!=n)&&(temp!=NULL))
+	{
+		if(n<(temp->data))
+		  {
+			parent=temp;
+			temp=temp->left;
+	  	  }
+		else
+		  {
+			parent=temp;
+			temp=temp->right;
+		  }
+	}
+	if(temp==NULL)
+	{
+		cout<<"Number not found"<<endl;
+		return;
+	}
+	if(temp->left==NULL)
+		{
+			r=temp->right;
+		}
+	else
+		if(temp->right==NULL)
+			r=temp->left;
+		else
+		{
+			father=temp;
+			r=temp->right;
+			son=r->left;
+			while(son!=NULL)
+			{	
+				father=r; 
+				r=son;
+				son=r->left;
+			}
+			if (father!=temp)
+			{
+				father->left=r->right;
+				r->right=temp->right;
+			}
+			r->left=temp->left;
+		}
+	if(parent==NULL)
+ 		root=r;
+	else
+		if(temp==parent->left)
+			parent->left=r;
+		else
+			parent->right=r;
+	delete temp;
+	return ;
+}

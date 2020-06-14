@@ -1,0 +1,110 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<iostream>
+
+using namespace std;
+
+#define MAX 10
+int top=-1,front=0,end=0;
+
+class graph
+{
+	public:
+		int vertex;
+		graph *next;
+		graph(int n=0)
+		{
+			vertex=n;
+			next=NULL;
+		}
+};
+
+class listgraph : public graph
+{
+	graph *list[MAX];
+	int n;
+	public:
+		listgraph(int nov)
+		{
+			n=nov;
+			for(int i=0;i<n;i++)
+				list[i]=NULL;
+		}
+		void create();
+		void display();
+};
+
+void listgraph :: create()
+{
+	int i,j;
+	graph *temp, *newnode;
+	char ans;
+	for(i=0;i<n;i++)
+	{
+		for(j=0;j<n;j++)
+		{
+			cout<<"\nIs there an edge between vertex "<<i+1<<" and "<<j+1;
+			cin>>ans;
+			if(ans=='y'||ans=='Y')
+			{
+				newnode = new graph(j+1);
+				if(list[i]==NULL)
+				{
+					list[i]=temp=newnode;
+				}
+				else
+				{
+					temp->next=newnode;
+					temp=newnode;
+				}
+			}
+		}
+	}
+}
+
+void listgraph :: display()
+{
+	graph *temp;
+	int i;
+	for(i=0;i<n;i++)
+	{
+		cout<<endl;
+		cout<<"Vertex"<<i+1<<"->";
+		temp=list[i];
+		while(temp!=NULL)
+		{
+			cout<<"v"<<temp->vertex<<"->";
+			temp=temp->next;
+		}
+		cout<<"NULL";
+	}
+}
+
+int main()
+{
+	int num,n;
+	cout<<"Enter the number of nodes in the graph\n";
+	cin>>n;
+	listgraph l(n);
+	do
+	{
+		cout<<"\n1.Create\n2.Display\n3.Exit\nEnter your choice\n";
+		cin>>num;
+		switch(num)
+		{
+			case 1:
+				l.create();
+				break;
+			case 2:
+				l.display();
+				break;
+			case 3:
+				break;
+			default:
+				cout<<"Wrong choice\n";
+				break;
+		}
+	}while(num!=3);
+	return 0;
+}
+

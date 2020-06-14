@@ -1,0 +1,303 @@
+#include<iostream>
+using namespace std;
+class Node{
+	public:
+		int data;
+		Node *next,*prev;
+};
+class List:public Node{
+	Node *listptr,*temp;
+	public:
+		List()
+		{
+			listptr=NULL;
+			temp=NULL;
+		}
+		void create();
+		void display();
+		void insert_beg();
+		void insert_end();
+		void insert_int();
+		void delete_beg();
+		void delete_end();
+		void delete_int();
+		void length();
+		void reverse();
+		void sort();
+		void copy(List &list);
+		void search();
+};
+int main()
+{
+	List list,list1;
+	int ch;
+	while(1)
+	{
+		cout<<"\nChoices: [1]Create [2]Display [3]Insert at beginning [4]Insert at end [5]Insert at intermediate position [6]Delete at beginning [7]Delete at end [8]Delete at intermediate position [9]Length [10]Reverse [11]Sort [12]Search [13]Copy [14]Exit"<<endl;
+		cout<<"Enter choice: ";
+		cin>>ch;
+		switch(ch)
+		{
+			case 1:
+				list.create();
+				break;
+			case 2:
+				list.display();
+				break;
+			case 3:
+				list.insert_beg();
+				break;
+			case 4:
+				list.insert_end();
+				break;
+			case 5:
+				list.insert_int();
+				break;
+			case 6:
+				list.delete_beg();
+				break;
+			case 7:
+				list.delete_end();
+				break;
+			case 8:
+				list.delete_int();
+				break;
+			case 9:
+				list.length();
+				break;
+			case 10:
+				list.reverse();
+				break;
+			case 11:
+				list.sort();
+				break;
+			case 12:
+				list.search();
+				break;
+			case 13:
+				list1.copy(list);
+				cout<<"List 1: ";
+				list.display();
+				cout<<"\nNew List: ";
+				list1.display();
+				break;
+			case 14:
+				cout<<"Exiting...";
+				return 0;
+				break;
+			default:
+				cout<<"Invalid choice"<<endl;
+		}
+	}
+	return 0;
+}
+void List::create()
+{
+	int num;
+	cout<<"Enter data: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	newnode->prev=NULL;
+	if(listptr==NULL)
+	{
+		listptr=newnode;
+		temp=listptr;
+	}
+	else
+	{
+		temp->next=newnode;
+		newnode->prev=temp;
+		temp=temp->next;
+	}
+}
+void List::display()
+{
+	Node *temp=listptr; //new temp
+	while(temp!=NULL)
+	{
+		cout<<temp->data<<"<->";
+		temp=temp->next;
+	}
+	cout<<"NULL";
+}
+void List::insert_beg()
+{
+	int num;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	newnode->prev=NULL;
+	if(listptr==NULL)
+	{
+		listptr=newnode;
+		temp=listptr;
+	}
+	else
+	{
+    	newnode->next=listptr;
+		listptr=newnode;
+		newnode->next->prev=newnode;
+	}
+}
+void List::insert_end()
+{
+	int num;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	newnode->prev;
+	temp=listptr;
+	while(temp->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	temp->next=newnode;
+	newnode->prev=temp;
+}
+void List::insert_int()
+{
+	int num,pos;
+	cout<<"Enter data to be inserted: ";
+	cin>>num;
+	cout<<"Enter insert position: ";
+    cin>>pos;
+	Node *newnode=new Node;
+	newnode->data=num;
+	newnode->next=NULL;
+	newnode->prev=NULL;
+	temp=listptr;
+	for(int i=1;i<pos-1&&temp->next!=NULL;i++)
+	{
+		temp=temp->next;
+	}
+	newnode->next=temp->next;
+	temp->next=newnode;
+	newnode->prev=temp;
+	newnode->next->prev=newnode;
+}
+void List::delete_beg()
+{
+	temp=listptr;
+	listptr=temp->next;
+	if(temp->next!=NULL)
+	{
+		temp->next->prev=NULL;
+	}
+}
+void List::delete_end()
+{
+	Node *temp1;
+	temp=listptr;
+	while(temp->next->next!=NULL)
+	{
+		temp=temp->next;
+	}
+	temp1=temp->next;
+	temp1->prev=NULL;
+	delete(temp1);
+	temp->next=NULL;
+}
+void List::delete_int()
+{
+	int i,pos;
+	Node *temp1;
+	cout<<"Enter delete position: ";
+	cin>>pos;
+	temp=listptr;
+	for(i=1;i<pos-1&&temp->next!=NULL;i++)
+	{
+		temp=temp->next;
+	}
+	temp1=temp->next;
+	temp->next=temp1->next;
+	temp1->next->prev=temp;
+	delete(temp1);
+}
+void List::length()
+{
+	int count=0;
+	temp=listptr;
+	while(temp!=NULL)
+	{
+		temp=temp->next;
+		count++;
+	}
+	cout<<"Length="<<count<<endl;
+}
+void List::reverse()
+{
+	Node *forw,*curr,*back;
+	forw=listptr;
+	curr=NULL;
+	while(forw!=NULL)
+	{
+		back=curr;
+		curr=forw;
+		forw=forw->next;
+		curr->next=back;
+	}
+	listptr=curr;
+}
+
+void List::sort()
+{
+	Node *i,*j;
+	int t;
+	for(i=listptr;i->next!=NULL;i=i->next)
+	{
+		for(j=i->next;j!=NULL;j=j->next)
+		{
+			if(i->data>j->data)
+			{
+				t=i->data;
+				i->data=j->data;
+				j->data=t;
+			}
+		}
+	}
+}
+void List::search()
+{
+	int num,count;
+	cout<<"Enter data to be searched: ";
+	cin>>num;
+	temp=listptr;
+	while(temp!=NULL)
+	{
+		count++;
+		if(temp->data==num)
+		{
+			cout<<"Data found at node position "<<count<<endl;
+		}
+		temp=temp->next;
+	}
+}
+void List::copy(List &list)
+{
+	Node *temp1=list.listptr;
+	while(temp1!=NULL)
+	{
+		Node *newnode=new Node;
+		newnode->data=temp1->data;
+		newnode->next=NULL;
+		newnode->prev=NULL;
+		if(listptr==NULL)
+		{
+			listptr=newnode;
+			temp=listptr;
+		}
+		else
+		{
+			temp->next=newnode;
+			newnode->prev=temp;
+			temp=temp->next;
+		}
+		temp1=temp1->next;
+	}
+}
